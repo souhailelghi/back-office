@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './FetchSportCategories.css'; // Import CSS file for styling
 
-const FetchSportCategories = ({ onAddSport }) => {
+const FetchSportCategories = ({ setSportData }) => {
   const [sportCategories, setSportCategories] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(''); // token input field
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     // Fetch the sport categories when the token is provided
@@ -29,6 +32,12 @@ const FetchSportCategories = ({ onAddSport }) => {
       setError(error.response ? error.response.data : 'Error fetching data');
       setLoading(false);
     }
+  };
+
+  const handleAddSport = (categoryId) => {
+    // Set the sport data and navigate to AddSport
+    setSportData({ token, categoryId });
+    navigate('/add-sport'); // Navigate to AddSport component
   };
 
   return (
@@ -60,7 +69,7 @@ const FetchSportCategories = ({ onAddSport }) => {
             <p><strong>Description:</strong> {category.description || 'No description'}</p>
             <p><strong>Date Created:</strong> {category.dateCreation || 'N/A'}</p>
             {/* Button to add sport with the token and category ID */}
-            <button onClick={() => onAddSport(token, category.id)}>Adding Sport now</button>
+            <button onClick={() => handleAddSport(category.id)}>Adding Sport now</button>
           </div>
         ))}
       </div>

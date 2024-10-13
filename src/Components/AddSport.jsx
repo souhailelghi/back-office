@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const AddSport = () => {
+const AddSport = ({ token, categorieId }) => {
   const [formData, setFormData] = useState({
-    categorieId: '',
+    categorieId: categorieId || '', // Use the passed category ID
     referenceSport: '',
     nbPlayer: '',
     daysoff: '',
@@ -15,7 +15,13 @@ const AddSport = () => {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState(''); // Token input field
+
+  useEffect(() => {
+    // Update form data if category ID changes
+    if (categorieId) {
+      setFormData((prevData) => ({ ...prevData, categorieId }));
+    }
+  }, [categorieId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,32 +63,27 @@ const AddSport = () => {
     }
   };
 
+    // Function to truncate the token to 20 characters
+    const truncateToken = (token) => {
+        return token.length > 20 ? token.slice(0, 20) + '...' : token;
+      };
+
   return (
     <div>
       <h2>Add Sport</h2>
 
       {/* Input for the token */}
       <div>
-        <label>Token</label>
-        <input
-          type="text"
-          value={token}
-          onChange={(e) => setToken(e.target.value)}
-          placeholder="Enter your token"
-        />
+        <label>Token : </label>   <p title={token}>{truncateToken(token)}</p> 
+     
       </div>
 
       {/* Form for adding a sport */}
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Category ID</label>
-          <input
-            type="text"
-            name="categorieId"
-            value={formData.categorieId}
-            onChange={handleChange}
-            required
-          />
+          <label>Category ID : </label>
+          {formData.categorieId}
+      
         </div>
         <div>
           <label>Reference Sport</label>
