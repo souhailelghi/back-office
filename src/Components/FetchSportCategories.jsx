@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../Components/FetchSportCategories.css'; // Import CSS file for styling
+import './FetchSportCategories.css'; // Import CSS file for styling
 
-const FetchSportCategories = () => {
+const FetchSportCategories = ({ onAddSport }) => {
   const [sportCategories, setSportCategories] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -59,6 +59,8 @@ const FetchSportCategories = () => {
             <h3>{category.name}</h3>
             <p><strong>Description:</strong> {category.description || 'No description'}</p>
             <p><strong>Date Created:</strong> {category.dateCreation || 'N/A'}</p>
+            {/* Button to add sport with the token and category ID */}
+            <button onClick={() => onAddSport(token, category.id)}>Adding Sport now</button>
           </div>
         ))}
       </div>
