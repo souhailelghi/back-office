@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const SELECTandGetTimeRangesBySportAndDay = ({ onTimeRangeSelect }) => {
+const Tims = ({ onTimeRangeSelect }) => {
     const [sportId, setSportId] = useState('');
     const [day, setDay] = useState('');
     const [token, setToken] = useState('');
@@ -16,6 +16,13 @@ const SELECTandGetTimeRangesBySportAndDay = ({ onTimeRangeSelect }) => {
         const dayOfWeek = today.toLocaleDateString('en-US', { weekday: 'long' });
         setDay(dayOfWeek);
     }, []);
+
+    // Fetch time ranges whenever sportId or day changes
+    useEffect(() => {
+        if (sportId && day) {
+            fetchTimeRanges();
+        }
+    }, [sportId, day]);
 
     const fetchTimeRanges = async () => {
         try {
@@ -53,13 +60,8 @@ const SELECTandGetTimeRangesBySportAndDay = ({ onTimeRangeSelect }) => {
 
     return (
         <div>
-            <h1>Get Available Time Ranges for {day}</h1>
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    fetchTimeRanges();
-                }}
-            >
+            <h1>Get Available Time Ranges for.   {day}</h1>
+            <form>
                 <div>
                     <label htmlFor="sportId">Sport ID:</label>
                     <input
@@ -80,7 +82,6 @@ const SELECTandGetTimeRangesBySportAndDay = ({ onTimeRangeSelect }) => {
                         required
                     />
                 </div>
-                <button type="submit">Get Time Ranges</button>
             </form>
 
             {loading && <p>Loading...</p>}
@@ -113,4 +114,4 @@ const SELECTandGetTimeRangesBySportAndDay = ({ onTimeRangeSelect }) => {
     );
 };
 
-export default SELECTandGetTimeRangesBySportAndDay;
+export default Tims;
